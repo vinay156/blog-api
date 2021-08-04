@@ -1,7 +1,9 @@
  
 const user = require('../models/user')
-const jwt = require('jsonwebtoken')
+
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
 
 exports.login = async (req, res) => {
     let name = req.body.name
@@ -50,7 +52,6 @@ exports.signUp = async (req, res) => {
     //encrypts password
     pass = await bcrypt.hash(pass, 10)
 
-    //creates new user
     let newUser = new user({
         userName: name,
         password: pass

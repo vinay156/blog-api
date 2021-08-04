@@ -24,7 +24,6 @@ exports.addPost = async (req, res) => {
 }
 
 exports.getUserPost = async (req, res) => {
-    // returns post of a user
 
     let currUser = await user.findOne({ _id: req.params.id }).populate('posts')
     if (!currUser) {

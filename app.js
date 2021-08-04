@@ -1,19 +1,19 @@
+//MongoDB
+require('dotenv/config')
+const mongoose = require('mongoose')
+mongoose.connect(process.env.DB_CONNECTION, {useUnifiedTopology: true, useNewUrlParser:true}, ()=>{
+    console.log("DB is Connected..")
+})
+
+const cors = require('cors');
 const express = require('express');
 const app = express();
-const cors = require('cors');
-require('dotenv/config')
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 //Allow all origin
 app.use(cors())
-
-//MongoDB
-const mongoose = require('mongoose')
-mongoose.connect(process.env.DB_CONNECTION, {useUnifiedTopology: true, useNewUrlParser:true}, ()=>{
-    console.log("DB is Connected..")
-})
 
 //Routes
 app.use('/auth', require('./routes/auth-route'));

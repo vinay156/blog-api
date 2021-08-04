@@ -1,8 +1,8 @@
+const authController = require('../controller/auth-controller')
+const postsController = require('../controller/posts-controller')
+
 const express = require('express')
 const router = express.Router()
-const postsController = require('../controller/posts-controller')
-const authController = require('../controller/auth-controller')
-
 
 router.get('/page/:page', postsController.getPost)
 router.post('/', authController.isAuth, postsController.addPost)
