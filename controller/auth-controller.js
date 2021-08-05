@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-//Model
 const user = require("../models/user");
 
 exports.login = async (req, res) => {
@@ -47,7 +46,6 @@ exports.signUp = async (req, res) => {
     });
   }
 
-  //encrypts password
   pass = await bcrypt.hash(pass, 10);
 
   let newUser = new user({

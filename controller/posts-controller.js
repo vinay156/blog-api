@@ -1,10 +1,9 @@
 const comment = require("../models/comment");
 const posts = require("../models/posts");
-const user = require("../models/user");
 const scripts = require("./scripts");
+const user = require("../models/user");
 
 exports.addPost = async (req, res) => {
-  //adds posts
   let newPost = new posts({
     title: req.body.title,
     desc: req.body.desc,
@@ -63,7 +62,6 @@ exports.getPost = async (req, res) => {
 exports.getSinglePost = async (req, res) => {
   let id = req.params.id;
 
-  //checks if a object id is valid
   let isValid = scripts.isValidObjectId(id);
   if (!isValid) {
     return res.json({
