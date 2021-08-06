@@ -1,14 +1,23 @@
 const user = require("../models/user");
 
-exports.getCurrentUser = async (req, res) => {
-  let currUser = {
-    success: "Success",
-    data: {
-      username: req.user.userName,
-      id: req.user._id,
-    },
-  };
-  res.json(currUser);
+exports.getAllUser = async (req, res) => {
+  try {
+    await user
+      .find()
+      .populate("posts")
+      .then((users) => {
+        if (users.length === 0) {
+          res.status(404).json({
+            msg: "No Users found",
+          });
+        }
+        res.json(users);
+      });
+  } catch (err) {
+    res.status(500).json({
+      Error: err,
+    });
+  }
 };
 
 exports.getUser = async (req, res) => {

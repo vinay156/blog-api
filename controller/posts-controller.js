@@ -1,4 +1,3 @@
-const comment = require("../models/comment");
 const posts = require("../models/posts");
 const scripts = require("./scripts");
 const user = require("../models/user");
@@ -33,29 +32,6 @@ exports.getUserPost = async (req, res) => {
   res.json({
     success: "Success",
     data: currUser.posts,
-  });
-};
-
-exports.getPost = async (req, res) => {
-  let page = req.params.page;
-
-  if (isNaN(page)) {
-    return res.json({
-      err: "Not a page no",
-    });
-  }
-  page = parseInt(page);
-
-  let currPosts = await posts
-    .find()
-    .sort({ date: -1 })
-    .limit(10)
-    .skip(10 * page)
-    .populate("userid", "userName");
-
-  res.json({
-    success: "Success..",
-    data: currPosts,
   });
 };
 
