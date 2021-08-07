@@ -20,8 +20,8 @@ exports.getAllUser = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-  const id = req.params.id;
-  const currUser = await User.findOne({ _id: id });
+  const userId = req.params.id;
+  const currUser = await User.findOne({ _id: userId });
 
   if (!currUser) {
     return res.json({

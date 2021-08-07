@@ -1,12 +1,10 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
-const user = require("../models/user");
+const User = require("../models/user");
 
 exports.isAuthenticated = (req, res, next) => {
   const bearerHeaders = req.headers["authorization"];
   if (typeof bearerHeaders !== "undefined") {
-    let token = bearerHeaders.split(" ")[1];
+    const token = bearerHeaders.split(" ")[1];
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
@@ -15,14 +13,14 @@ exports.isAuthenticated = (req, res, next) => {
         });
       }
 
-      let tempUser = await user.findOne({ userName: decoded.name });
+      const user = await User.findOne({ userName: decoded.name });
 
-      if (!tempUser) {
+      if (!user) {
         return res.json({
           err: "Invalid User",
         });
       }
-      req.user = tempUser;
+      req.user = user;
       next();
     });
   } else {

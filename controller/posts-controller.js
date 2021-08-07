@@ -3,17 +3,19 @@ const Scripts = require("./scripts");
 const User = require("../models/user");
 
 exports.addPost = async (req, res) => {
+  const { title, desc } = req.body;
+  const userId = req.user._id;
   const newPost = new Posts({
-    title: req.body.title,
-    desc: req.body.desc,
-    userid: req.user._id,
+    title: title,
+    desc: desc,
+    userid: userId,
   });
-  let post = await newPost.save();
-  post = post._id;
+  const post = await newPost.save();
+  const postId = post._id;
 
   const currUser = await User.findOneAndUpdate(
-    { _id: req.user._id },
-    { $push: { posts: post } }
+    { _id: userId },
+    { $push: { posts: postId } }
   );
 
   res.json({
