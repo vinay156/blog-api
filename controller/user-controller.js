@@ -1,9 +1,8 @@
-const user = require("../models/user");
+const User = require("../models/user");
 
 exports.getAllUser = async (req, res) => {
   try {
-    await user
-      .find()
+    await User.find()
       .populate("posts")
       .then((users) => {
         if (users.length === 0) {
@@ -15,14 +14,14 @@ exports.getAllUser = async (req, res) => {
       });
   } catch (err) {
     res.status(500).json({
-      Error: err,
+      err,
     });
   }
 };
 
 exports.getUser = async (req, res) => {
-  let id = req.params.id;
-  let currUser = await user.findOne({ _id: id });
+  const id = req.params.id;
+  const currUser = await User.findOne({ _id: id });
 
   if (!currUser) {
     return res.json({
@@ -30,7 +29,7 @@ exports.getUser = async (req, res) => {
     });
   }
 
-  let resUser = {
+  const resUser = {
     username: currUser.userName,
     posts: currUser.posts,
   };

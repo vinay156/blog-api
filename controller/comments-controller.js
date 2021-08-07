@@ -1,24 +1,24 @@
-const comment = require("../models/comment");
-const posts = require("../models/posts");
-const scripts = require("./scripts");
+const Comment = require("../models/comment");
+const Posts = require("../models/posts");
+const Scripts = require("./scripts");
 
 exports.addComment = async (req, res) => {
-  let id = req.params.postId;
-  let isValid = scripts.isValidObjectId(id);
+  const id = req.params.postId;
+  const isValid = Scripts.isValidObjectId(id);
   if (!isValid) {
     return res.json({
       err: "Invalid Id",
     });
   }
 
-  let newComment = new comment({
+  let newComment = new Comment({
     desc: req.body.desc,
     user: req.user._id,
   });
 
   newComment = await newComment.save();
 
-  let currPost = await posts.findByIdAndUpdate(id, {
+  const currPost = await Posts.findByIdAndUpdate(id, {
     $push: { comments: newComment._id },
   });
 

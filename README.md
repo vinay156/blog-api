@@ -1,7 +1,7 @@
 #Description
 Created Blog-Api project for authenticated user can post and comment using JWT.
 
-#Instalation
+#Installation
 
 1. Clone project
 2. run command: npm i
