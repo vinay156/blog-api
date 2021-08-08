@@ -5,6 +5,10 @@ const commentController = require("../controller/comments-controller");
 
 const router = express.Router();
 
-router.post("/:postId", check.isAuthenticated, commentController.addComment);
+router.post(
+  "/:id/comment",
+  check.isAuthenticated,
+  commentController.addComment
+);
 
 module.exports = router;

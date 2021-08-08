@@ -47,6 +47,7 @@ exports.getSinglePost = async (req, res) => {
 
   res.json({
     success: "Success",
+    postId,
     data: post,
   });
 };

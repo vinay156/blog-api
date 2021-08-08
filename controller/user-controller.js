@@ -11,7 +11,7 @@ exports.getUser = async (req, res) => {
   }
 
   const resUser = {
-    id: user._id,
+    userId,
     userName: user.userName,
     posts: user.posts,
   };
@@ -29,6 +29,7 @@ exports.getUserPost = async (req, res) => {
 
   res.json({
     success: "Success",
+    userId,
     data: user.posts,
   });
 };

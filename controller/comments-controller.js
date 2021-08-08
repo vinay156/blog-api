@@ -5,7 +5,7 @@ const scripts = require("./scripts");
 exports.addComment = async (req, res) => {
   const { description } = req.body;
   const userId = req.user._id;
-  const postId = req.params.postId;
+  const postId = req.params.idd;
   const isValid = scripts.isValidObjectId(postId);
   if (!isValid) {
     return res.json({

@@ -26,7 +26,7 @@ exports.login = async (req, res) => {
     res.json({
       success: "logged in",
       token,
-      id: user._id,
+      userId: user._id,
     });
   } else {
     res.json({
@@ -60,6 +60,6 @@ exports.signUp = async (req, res) => {
   });
   res.json({
     success: "successfully signed up",
-    id: newUser._id,
+    userId: newUser._id,
   });
 };
