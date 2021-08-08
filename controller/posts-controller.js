@@ -1,53 +1,41 @@
 const Posts = require("../models/posts");
-const Scripts = require("./scripts");
+const scripts = require("./scripts");
 const User = require("../models/user");
 
 exports.addPost = async (req, res) => {
-  const { title, desc } = req.body;
+  const { title, description } = req.body;
   const userId = req.user._id;
-  const newPost = new Posts({
-    title: title,
-    desc: desc,
-    userid: userId,
+  const post = new Posts({
+    title,
+    description,
+    user: userId,
   });
-  const post = await newPost.save();
-  const postId = post._id;
+  const postSave = await post.save();
+  const postId = postSave._id;
 
-  const currUser = await User.findOneAndUpdate(
+  const user = await User.findOneAndUpdate(
     { _id: userId },
     { $push: { posts: postId } }
   );
 
   res.json({
+    postId,
+    userId,
     success: "Post Added",
   });
 };
 
-exports.getUserPost = async (req, res) => {
-  const currUser = await User.findOne({ _id: req.params.id }).populate("posts");
-  if (!currUser) {
-    return res.json({
-      err: "User dosent exist",
-    });
-  }
-
-  res.json({
-    success: "Success",
-    data: currUser.posts,
-  });
-};
-
 exports.getSinglePost = async (req, res) => {
-  const id = req.params.id;
+  const postId = req.params.id;
 
-  const isValid = Scripts.isValidObjectId(id);
+  const isValid = scripts.isValidObjectId(postId);
   if (!isValid) {
     return res.json({
       err: "Invalid id",
     });
   }
 
-  const currPost = await Posts.findById(id)
+  const post = await Posts.findById(postId)
     .populate("userid", "userName")
     .populate({
       path: "comments",
@@ -59,6 +47,6 @@ exports.getSinglePost = async (req, res) => {
 
   res.json({
     success: "Success",
-    data: currPost,
+    data: post,
   });
 };

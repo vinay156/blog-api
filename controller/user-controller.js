@@ -1,37 +1,34 @@
 const User = require("../models/user");
 
-exports.getAllUser = async (req, res) => {
-  try {
-    await User.find()
-      .populate("posts")
-      .then((users) => {
-        if (users.length === 0) {
-          res.status(404).json({
-            msg: "No Users found",
-          });
-        }
-        res.json(users);
-      });
-  } catch (err) {
-    res.status(500).json({
-      err,
-    });
-  }
-};
-
 exports.getUser = async (req, res) => {
   const userId = req.params.id;
-  const currUser = await User.findOne({ _id: userId });
 
-  if (!currUser) {
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
     return res.json({
       err: "user dosent exist",
     });
   }
 
   const resUser = {
-    username: currUser.userName,
-    posts: currUser.posts,
+    id: user._id,
+    userName: user.userName,
+    posts: user.posts,
   };
   res.json(resUser);
+};
+
+exports.getUserPost = async (req, res) => {
+  const userId = req.params.id;
+  const user = await User.findOne({ _id: userId }).populate("posts");
+  if (!user) {
+    return res.json({
+      err: "User dosent exist",
+    });
+  }
+
+  res.json({
+    success: "Success",
+    data: user.posts,
+  });
 };

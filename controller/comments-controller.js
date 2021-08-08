@@ -3,7 +3,7 @@ const Posts = require("../models/posts");
 const scripts = require("./scripts");
 
 exports.addComment = async (req, res) => {
-  const { desc } = req.body;
+  const { description } = req.body;
   const userId = req.user._id;
   const postId = req.params.postId;
   const isValid = scripts.isValidObjectId(postId);
@@ -13,19 +13,22 @@ exports.addComment = async (req, res) => {
     });
   }
 
-  let newComment = new Comment({
-    desc: desc,
+  let comment = new Comment({
+    description,
     user: userId,
     post: postId,
   });
 
-  newComment = await newComment.save();
+  comment = await comment.save();
 
-  const currPost = await Posts.findByIdAndUpdate(postId, {
-    $push: { comments: newComment._id },
+  const post = await Posts.findByIdAndUpdate(postId, {
+    $push: { comments: comment._id },
   });
 
   res.json({
+    userId,
+    postId,
+    commentId: comment._id,
     success: "Success.....",
   });
 };

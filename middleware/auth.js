@@ -13,7 +13,7 @@ exports.isAuthenticated = (req, res, next) => {
         });
       }
 
-      const user = await User.findOne({ userName: decoded.name });
+      const user = await User.findOne({ userName: decoded.userName });
 
       if (!user) {
         return res.json({

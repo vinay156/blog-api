@@ -1,30 +1,32 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const User = require("../models/user");
 
 exports.login = async (req, res) => {
-  const { name, pass } = req.body;
+  const { userName, password } = req.body;
   const key = process.env.JWT_SECRET;
 
-  const tempUser = await User.findOne({ userName: name });
-  if (!tempUser) {
+  const user = await User.findOne({ userName });
+  if (!user) {
     return res.json({
       err: "User dosent exist",
     });
   }
 
-  const isAuth = await bcrypt.compare(pass, tempUser.password);
+  const isAuth = await bcrypt.compare(password, user.password);
   if (isAuth) {
     const payLoad = {
-      name: tempUser.userName,
-      password: tempUser.password,
+      userName,
+      password,
     };
 
     const token = await jwt.sign(payLoad, key);
 
     res.json({
       success: "logged in",
-      token: token,
+      token,
+      id: user._id,
     });
   } else {
     res.json({
@@ -34,19 +36,18 @@ exports.login = async (req, res) => {
 };
 
 exports.signUp = async (req, res) => {
-  const { name, pass } = req.body;
+  const { userName, password } = req.body;
 
-  const tempUser = await User.findOne({ userName: name });
-  if (tempUser) {
+  const user = await User.findOne({ userName });
+  if (user) {
     return res.json({
       err: "User already Exists",
     });
   }
 
-  const hashedPassword = await bcrypt.hash(pass, 10);
-
+  const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = new User({
-    userName: name,
+    userName,
     password: hashedPassword,
   });
 
@@ -59,5 +60,6 @@ exports.signUp = async (req, res) => {
   });
   res.json({
     success: "successfully signed up",
+    id: newUser._id,
   });
 };
